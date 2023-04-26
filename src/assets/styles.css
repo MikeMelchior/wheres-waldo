@@ -1,0 +1,21 @@
+* {
+  margin: 0;
+  box-sizing: border-box;
+}
+
+body,
+html {
+  min-height: 100%;
+}
+
+.picture-container {
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+#puzzle {
+  aspect-ratio: 16/9;
+  height: 80%
+}
