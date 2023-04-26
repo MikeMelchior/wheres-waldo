@@ -8,14 +8,17 @@ html {
   min-height: 100%;
 }
 
+#root {
+  background-color: #e8fcf9;
+}
 .picture-container {
-  height: 100vh;
+  height: fit-content;
   display: flex;
   justify-content: center;
   align-items: center;
 }
 
-#puzzle {
-  aspect-ratio: 16/9;
-  height: 80%
+#puzzle { 
+  height: 900px;
+  width: 1600px;
 }
