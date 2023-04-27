@@ -1,7 +1,11 @@
 import React, { useState } from 'react'
+import CharacterSelectWindow from './CharacterSelect'
 
 export default function PictureCard( { puzzle } ) {
   const [remainingCharacters, setRemainingCharacters] = useState(puzzle.possibleCharacters)
+
+    // may use for specific character selecting in game
+  // const [selectedCharacter, setSelectedCharacter] = useState()
 
   const handleClick = (e) => {
     // use getBoundingClientRect() method to determine distance away from top & left
@@ -36,12 +40,17 @@ export default function PictureCard( { puzzle } ) {
       setRemainingCharacters((previousRemainingCharacters) => {
         return previousRemainingCharacters.filter(character => character !== foundCharacter)
       })
-    } 
+    } else {
+      // notify character doesn't exist in this location
+    }
   }
 
   return (
     <div className="picture-container">
       <p>Remaining Characters: {remainingCharacters.length}</p>
+      <CharacterSelectWindow 
+        characters={remainingCharacters} 
+      />
       <img 
         id='puzzle' 
         src={puzzle.img} 
