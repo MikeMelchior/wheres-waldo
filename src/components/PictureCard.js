@@ -7,7 +7,14 @@ export default function PictureCard( { puzzle } ) {
     // may use for specific character selecting in game
   // const [selectedCharacter, setSelectedCharacter] = useState()
 
+    // use to determine if click event should remove character select 'dropdown' menu
+  // const [characterSelectWindowShowing, setCharacterSelectWindowShowing] = useState(false)
+
   const handleClick = (e) => {
+    // if (characterSelectWindowShowing) {
+      // setCharacterSelectWindowShowing(false)
+    // }
+    
     // use getBoundingClientRect() method to determine distance away from top & left
     // of screen and minus them from event.client x/y coordinates to determine click
     // location within the image
@@ -48,9 +55,10 @@ export default function PictureCard( { puzzle } ) {
   return (
     <div className="picture-container">
       <p>Remaining Characters: {remainingCharacters.length}</p>
-      <CharacterSelectWindow 
+      { // characterSelectWindowShowing && 
+        <CharacterSelectWindow 
         characters={remainingCharacters} 
-      />
+      />}
       <img 
         id='puzzle' 
         src={puzzle.img} 
