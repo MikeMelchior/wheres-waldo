@@ -1,7 +1,11 @@
 import React from 'react'
 import uniqid from 'uniqid'
 
-export default function CharacterSelectWindow( { characters, clickCoordinates } ) {
+export default function CharacterSelectWindow( { 
+  characters, 
+  clickCoordinates,
+  remainingCharacters, 
+  checkCoordinatesForRemainingCharacter } ) {
 
   
   return (
@@ -10,7 +14,9 @@ export default function CharacterSelectWindow( { characters, clickCoordinates } 
       <div className='character-selections'>
         {characters.map(character => {
           return (
-            <div key={uniqid()} onClick={() => console.log(character)} className='character-selection'>
+            <div key={uniqid()} onClick={() => {
+              checkCoordinatesForRemainingCharacter(remainingCharacters, character)
+            } } className='character-selection'>
               <img id='character-selection-img' src={character.img} alt={character.name} />
               <p>{character.name}</p>
             </div>
