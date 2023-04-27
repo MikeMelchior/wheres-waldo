@@ -1,17 +1,25 @@
-import beach from './waldo-beach.jpg'
+import waldoAvatar from '../assets/waldo-avatar.png'
+import beachPuzzle from './waldo-beach.jpg'
 
 
 
 const pictures = {
   beach: {
     name: 'beach-puzzle',
-    img: beach,
+    img: beachPuzzle,
     possibleCharacters: [
-      'Waldo'
+      {
+        name: 'Waldo',
+        img: waldoAvatar,
+        location: {
+          xMin: 660,
+          xMax: 730,
+          yMin: 609,
+          yMax: 697
+        }
+      },
     ]
-  }
-
-
+  },
 }
 
 export { pictures }
