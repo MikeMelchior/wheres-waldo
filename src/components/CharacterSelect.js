@@ -9,14 +9,14 @@ export default function CharacterSelectWindow( {
 
   
   return (
-    <div style={{position: 'absolute', top: clickCoordinates.y - 20, left: clickCoordinates.x - 20}}>
+    <div style={{position: 'absolute', top: clickCoordinates.y - 35, left: clickCoordinates.x - 35}}>
       <div className="tag-box"></div>
       <div className='character-selections'>
         {characters.map(character => {
           return (
             <div key={uniqid()} onClick={() => {
               checkCoordinatesForRemainingCharacter(remainingCharacters, character)
-            } } className='character-selection'>
+            }} className='character-selection'>
               <img id='character-selection-img' src={character.img} alt={character.name} />
               <p>{character.name}</p>
             </div>
