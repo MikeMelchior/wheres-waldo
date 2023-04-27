@@ -14,6 +14,7 @@ html {
 .picture-container {
   height: fit-content;
   display: flex;
+  flex-direction: column;
   justify-content: center;
   align-items: center;
 }
@@ -22,3 +23,29 @@ html {
   height: 900px;
   width: 1600px;
 }
+
+.character-select-window {
+  border: 1px solid;
+  background-color: #ffffff;
+}
+
+  .character-selection {
+    display: flex;
+    align-items: center;
+    gap: 25px;
+    text-align: center;
+    width: 200px;
+    cursor: pointer;
+  }
+
+  .character-selection:hover { 
+    background-color: #f3f3f3;
+  }
+
+    #character-selection-img {
+      height: 35px;
+    }
+
+    .character-selection p {
+      flex: 1;
+    }
