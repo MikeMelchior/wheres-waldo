@@ -11,6 +11,20 @@ html {
 #root {
   background-color: #e8fcf9;
 }
+
+.app {
+  padding-top : 20px
+}
+
+.header {
+  height: fit-content;
+  min-height: 200px;
+}
+
+  #character-avatar-header {
+    height: 120px;
+  }
+
 .picture-container {
   height: fit-content;
   display: flex;
@@ -24,17 +38,23 @@ html {
   width: 1600px;
 }
 
-.character-select-window {
+.character-selections {
   border: 1px solid;
   background-color: #ffffff;
 }
+  .tag-box {
+    height: 70px;
+    width: 70px;
+    border: 3px solid;
+  }
 
   .character-selection {
+    
     display: flex;
     align-items: center;
     gap: 25px;
     text-align: center;
-    width: 200px;
+    width: 120px;
     cursor: pointer;
   }
 
@@ -49,3 +69,24 @@ html {
     .character-selection p {
       flex: 1;
     }
+
+.footer {
+  display: flex;
+  justify-content: end;
+  padding: 5px 15px;
+}
+
+  .footer a {
+    text-decoration: none;
+    font-size: 20px;
+    opacity: 0.5;
+  }
+
+
+.hidden {
+  width: 0;
+  height: 0;
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+}
