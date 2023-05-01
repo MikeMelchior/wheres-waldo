@@ -35,6 +35,7 @@ import {
   serverTimestamp,
 } from 'firebase/firestore';
 import { getActiveElement } from '@testing-library/user-event/dist/utils';
+import Signup from './Signup';
 
 
 const app = {
@@ -48,9 +49,6 @@ const app = {
 
 
 
- 
-
-
 
 
 function App() {
@@ -60,61 +58,30 @@ function App() {
     // use to change character style in header once character is found (grey-out)
   const [characters, setCharacters] = useState([])
 
+    // for now, randomly set puzzle, may add ability to select puzzle in future
   useEffect(() => {
     const puzzleNames = Object.keys(pictures)
-
     const randomPick = () => {
       let randomNum = Math.floor(Math.random() * puzzleNames.length)
       return puzzleNames[randomNum]
     } 
-    
     setPuzzle(pictures[randomPick()])
   }, [])
-
-  
-
-  useEffect(() => {
-    setPlayer(getAuth().currentUser)
-  }, [])
-
-
-  async function signIn() {
-  let provider = new GoogleAuthProvider();
-  await signInWithPopup(getAuth(), provider)
-  document.querySelector('.sign-in').classList.add('hidden')
-  document.querySelector('.sign-out').classList.remove('hidden')
-}
-
-function signOutUser() {
-  signOut(getAuth())
-  document.querySelector('.sign-in').classList.remove('hidden')
-  document.querySelector('.sign-out').classList.add('hidden')
-}
-
-
-
-function authStateObserver(user) {
-  if (user) {
-    setPlayer(user)
-  } else {
-    setPlayer(null)
-  }
-}
-useEffect(() => {
-  function initFirebaseAuth() {
-    onAuthStateChanged(getAuth(), authStateObserver)
-  }
-  initFirebaseAuth()
-},[])
 
 
   return (
     
-
+    <>
+      { player 
+      ?
       <div className='app'>
-        <button className='sign-in' onClick={signIn}>Sign In With Google</button>
-        <button className="sign-out hidden" onClick={signOutUser} >Sign Out</button>
-        {player && <p className='welcome'>Hello {player.displayName}!</p>}
+        <Signup player={player} setPlayer={setPlayer} />
+        <div className="player">
+          <img id='player-image' src={player.photoURL} alt={player.displayName} />
+          <p className='welcome'>Hello {player.displayName}!</p>
+          
+        </div>
+        
         <div>
           <div>
               {puzzle && 
@@ -127,6 +94,10 @@ useEffect(() => {
         <Footer /> 
       </div>
 
+      : <Signup player={player} setPlayer={setPlayer} />
+      }
+      
+    </>
   );
 }
 initializeApp(app)
