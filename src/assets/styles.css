@@ -10,15 +10,70 @@ html {
 
 #root {
   background-color: #e8fcf9;
+  min-height: 100vh;
 }
 
+.sign-in-page {
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+  .sign-in-page .card {
+    margin: auto;
+    padding-top: 30px;
+    text-align: center;
+    width: 80%;
+    max-width: 350px;
+    background-color: rgb(249, 249, 249);
+    border: 4px solid rgb(139, 139, 253);
+  }
+
+  .sign-in-page button {
+    width: 60%;
+    margin: 30px auto;
+    border-radius: 10px;
+    background-color:#91da55;
+    padding: 10px;
+    font-weight: 600px;
+    font-size: 20px;
+  }
+
+    .player {
+      display: flex;
+      gap: 10px;
+      align-items: center;
+      justify-content: end;
+      padding-right: 20px;
+    }
+
+      .player p {
+        font-size: 20px;
+      }
+
+      #player-image {
+        border-radius: 50px;
+        height: 70px;
+      }
+
+      .sign-out {
+        align-self: start;
+        border-radius: 5px;
+        margin: 5px 5px 0 auto;
+      }
+
 .app {
-  padding-top : 20px
+  display: flex;
+  flex-direction: column;
 }
 
 .header {
   height: fit-content;
   min-height: 200px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 
   #character-avatar-header {
