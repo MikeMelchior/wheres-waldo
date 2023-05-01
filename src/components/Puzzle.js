@@ -1,7 +1,12 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import CharacterSelectWindow from './CharacterSelect'
 
-export default function Puzzle( { puzzle } ) {
+export default function Puzzle( { puzzle, setCharacters } ) {
+    // once puzzle has loaded, set characters to be used in header
+  useEffect(() => {
+    setCharacters(puzzle.possibleCharacters)
+  }, [puzzle.possibleCharacters, setCharacters])
+
   const [remainingCharacters, setRemainingCharacters] = useState(puzzle.possibleCharacters)
   
     // set client click coords to style position of pop up window
@@ -10,6 +15,7 @@ export default function Puzzle( { puzzle } ) {
     // set coordinates of click event on puzzle to check for character
   const [puzzleClickX, setPuzzleClickX] = useState()
   const [puzzleClickY, setPuzzleClickY] = useState()
+
     // use to determine if click event should remove character select 'dropdown' menu
   const [characterSelectWindowShowing, setCharacterSelectWindowShowing] = useState(false)
 
@@ -49,6 +55,11 @@ export default function Puzzle( { puzzle } ) {
 
     // if character has been found, update remainingCharacters state
     if (foundCharacter && foundCharacter === character) {
+      setCharacters((current) => {
+        let updatedCharacters = current.filter(char => char.name !== foundCharacter.name)
+        foundCharacter.found = true;
+        return [...updatedCharacters, foundCharacter]
+      })
       alert(`you found ${foundCharacter.name}!`);
       setRemainingCharacters((previousRemainingCharacters) => {
         return previousRemainingCharacters.filter(character => character !== foundCharacter)
@@ -66,7 +77,6 @@ export default function Puzzle( { puzzle } ) {
 
   return (
     <div className="picture-container">
-      <p>Remaining Characters: {remainingCharacters.length}</p>
       {  characterSelectWindowShowing 
         && clientClickCoordinates !== undefined 
         && <CharacterSelectWindow 
