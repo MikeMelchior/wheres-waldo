@@ -20,6 +20,16 @@ html {
   justify-content: center;
 }
 
+  .loading {
+    margin: auto;
+    font-size: 30px;
+    height: 100vh;
+    width: 100vw;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
   .sign-in-page .card {
     margin: auto;
     padding-top: 30px;
@@ -63,6 +73,8 @@ html {
         margin: 5px 5px 0 auto;
       }
 
+
+
 .app {
   display: flex;
   flex-direction: column;
@@ -76,8 +88,14 @@ html {
   align-items: center;
 }
 
+  .character-header {
+    text-align: center;
+    font-size: 20px;
+  }
+
   #character-avatar-header {
     height: 120px;
+    border-radius: 10px;
   }
 
 .picture-container {
@@ -94,7 +112,6 @@ html {
 }
 
 .character-selections {
-  border: 1px solid;
   background-color: #ffffff;
 }
   .tag-box {
@@ -104,17 +121,17 @@ html {
   }
 
   .character-selection {
-    
     display: flex;
     align-items: center;
     gap: 25px;
     text-align: center;
-    width: 120px;
+    width: 140px;
     cursor: pointer;
   }
 
   .character-selection:hover { 
     background-color: #f3f3f3;
+    border: 1px solid;
   }
 
     #character-selection-img {
@@ -122,7 +139,9 @@ html {
     }
 
     .character-selection p {
-      flex: 1;
+      margin: 0;
+      display: flex;
+      justify-content: center;
     }
 
 .footer {
