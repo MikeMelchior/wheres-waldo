@@ -1,41 +1,13 @@
 import { useEffect, useState } from 'react';
-import { Container } from 'react-bootstrap';
-
 
 import { pictures } from '../puzzles/puzzlesData';
 import '../assets/styles.css'
 import Puzzle from './Puzzle';
 import Header from './Header';
 import Footer from './Footer';
-
+import Signup from './Signup';
 
 import { initializeApp } from "firebase/app";
-
-
-
-
-import {
-  GoogleAuthProvider,
-  signInWithPopup,
-  getAuth,
-  onAuthStateChanged,
-  signOut,
-} from 'firebase/auth';
-import {
-  getFirestore,
-  collection,
-  addDoc,
-  query,
-  orderBy,
-  limit,
-  onSnapshot,
-  setDoc,
-  updateDoc,
-  doc,
-  serverTimestamp,
-} from 'firebase/firestore';
-import { getActiveElement } from '@testing-library/user-event/dist/utils';
-import Signup from './Signup';
 
 
 const app = {
@@ -46,8 +18,6 @@ const app = {
   messagingSenderId: "151993785441",
   appId: "1:151993785441:web:67e759685ca717b6f89e20"
 }
-
-
 
 
 
@@ -68,35 +38,33 @@ function App() {
     setPuzzle(pictures[randomPick()])
   }, [])
 
+  
+
 
   return (
-    
     <>
       { player 
       ?
-      <div className='app'>
-        <Signup player={player} setPlayer={setPlayer} />
-        <div className="player">
-          <img id='player-image' src={player.photoURL} alt={player.displayName} />
-          <p className='welcome'>Hello {player.displayName}!</p>
-          
-        </div>
-        
-        <div>
+        <div className='app'>
+          <Signup player={player} setPlayer={setPlayer} />
+          <div className="player">
+            <img id='player-image' src={player.photoURL} alt={player.displayName} />
+            <p className='welcome'>Hello {player.displayName}!</p>
+          </div>
           <div>
-              {puzzle && 
-              <div className="main">
-                <Header puzzle={puzzle} characters={characters}/>
-                <Puzzle puzzle={puzzle} setCharacters={setCharacters}/>
-              </div>}
-          </div>           
+            <div>
+                {puzzle && 
+                <div className="main">
+                  <Header puzzle={puzzle} characters={characters}/>
+                  <Puzzle puzzle={puzzle} setCharacters={setCharacters}/>
+                </div>}
+            </div>           
+          </div>
+          <Footer /> 
         </div>
-        <Footer /> 
-      </div>
-
-      : <Signup player={player} setPlayer={setPlayer} />
+      :
+        <Signup player={player} setPlayer={setPlayer} />
       }
-      
     </>
   );
 }
