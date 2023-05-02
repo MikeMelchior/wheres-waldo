@@ -1,14 +1,50 @@
 import React, { useEffect, useState } from 'react'
 import CharacterSelectWindow from './CharacterSelect'
+import uniqid from 'uniqid'
+
+import { getAuth } from 'firebase/auth'
+
+import { 
+  collection, 
+  addDoc, 
+  serverTimestamp, 
+  getFirestore, 
+  query, 
+  onSnapshot,
+  doc,
+  setDoc,
+  orderBy,
+  limit, 
+  getDoc,
+  updateDoc,
+  } from 'firebase/firestore'
+
+const getUserName = () => {
+  return getAuth().currentUser.displayName
+}
+
+const calculateDuration = (startTime, finishTime) => {
+  if (!startTime || !finishTime) return null;
+  return null
+}
+
+
+
+
+
+
 
 export default function Puzzle( { puzzle, setCharacters } ) {
+
+  const [ID, setID] = useState()
+
     // once puzzle has loaded, set characters to be used in header
   useEffect(() => {
     setCharacters(puzzle.possibleCharacters)
   }, [puzzle.possibleCharacters, setCharacters])
 
   const [remainingCharacters, setRemainingCharacters] = useState(puzzle.possibleCharacters)
-  
+
     // set client click coords to style position of pop up window
   const [clientClickCoordinates, setClientClickCoordinates] = useState()
 
@@ -19,10 +55,62 @@ export default function Puzzle( { puzzle, setCharacters } ) {
     // use to determine if click event should remove character select 'dropdown' menu
   const [characterSelectWindowShowing, setCharacterSelectWindowShowing] = useState(false)
 
+    // Saves a new timestamp on the Cloud Firestore.
+  async function addGameToDatabase() {
+    // Add a new timestamp entry to the Firebase database.
+    try {
+      let ref = await addDoc(collection(getFirestore(), 'scores'), {
+        name: getUserName(),
+        startTime: serverTimestamp()
+      });
+      setID(ref.id)
+    }
+    catch(error) {
+      console.error('Error writing new score to Firebase Database', error);
+    }
+  }
+
+  async function setScoreOnDatabase() {
+    let docRef = doc(getFirestore(), 'scores', ID);
+
+    const docSnap = await getDoc(docRef);
+    let startTimeInteger = docSnap.data().startTime.seconds + (docSnap.data().startTime.nanoseconds / 1_000_000_000)
+    let finishTimeInteger = docSnap.data().finishTime.seconds + (docSnap.data().finishTime.nanoseconds / 1_000_000_000)
+    let scoreTimeInSeconds = finishTimeInteger - startTimeInteger;
+    let hours = Math.floor(scoreTimeInSeconds / 3600)
+    let minutes = Math.floor((scoreTimeInSeconds % 3600) / 60)
+    let seconds = Math.floor((scoreTimeInSeconds % 3600) % 60)
+
+    const addZero = (num) => {
+      let addZeroUsingArray = ['0'];
+      addZeroUsingArray.push(num.toString())
+      let result = addZeroUsingArray.join('')
+      return result
+    }
+
+    if (seconds.toString().length === 1) {
+      seconds = addZero(seconds)
+    }
+    if (minutes.toString().length === 1) {
+      minutes = addZero(minutes)
+    } 
+    if (hours.toString().length === 1) {
+      hours = addZero(hours)
+    }
+
+    try {
+      updateDoc(docRef, {
+        score: `${hours}:${minutes}:${seconds}`
+      })
+    } catch (e) {
+      console.log('Failed to update document: ', e)
+    }
+  }
+
+
   const handleClick = (e) => {
     // set click coordinates to pass to character selection popup window 
     setClientClickCoordinates({x: e.pageX, y: e.pageY})
-
 
     // allow 'click-off' to remove character select popup window 
     setCharacterSelectWindowShowing(current => !current)
@@ -38,7 +126,6 @@ export default function Puzzle( { puzzle, setCharacters } ) {
     setPuzzleClickY(y);
   }
 
-      
   const checkCoordinatesForRemainingCharacter = (remainingCharacters, character) => {
     let x = puzzleClickX;
     let y = puzzleClickY;
@@ -55,6 +142,20 @@ export default function Puzzle( { puzzle, setCharacters } ) {
 
     // if character has been found, update remainingCharacters state
     if (foundCharacter && foundCharacter === character) {
+
+        // if puzzle completed, add finish time to database document
+      if (noCharactersRemain) {
+        let docRef = doc(getFirestore(), 'scores', ID)
+        try {
+          updateDoc(docRef, {
+            finishTime: serverTimestamp()
+          })
+        } catch (e) {
+          console.log('Failed to update document: ', e)
+        }
+      }
+
+        // update characters to style header
       setCharacters((current) => {
         let updatedCharacters = current.filter(char => char.name !== foundCharacter.name)
         foundCharacter.found = true;
@@ -64,6 +165,9 @@ export default function Puzzle( { puzzle, setCharacters } ) {
       setRemainingCharacters((previousRemainingCharacters) => {
         return previousRemainingCharacters.filter(character => character !== foundCharacter)
       })
+
+      setScoreOnDatabase()
+      
     } else {
       alert(`That's not ${character.name}!`)
     }
@@ -72,10 +176,15 @@ export default function Puzzle( { puzzle, setCharacters } ) {
     setCharacterSelectWindowShowing(false)
   }
 
+  const noCharactersRemain = () => {
+    return remainingCharacters.length === 0;
+  }
 
+  
   
 
   return (
+    
     <div className="picture-container">
       {  characterSelectWindowShowing 
         && clientClickCoordinates !== undefined 
@@ -85,11 +194,13 @@ export default function Puzzle( { puzzle, setCharacters } ) {
         clickCoordinates={clientClickCoordinates} 
         checkCoordinatesForRemainingCharacter={checkCoordinatesForRemainingCharacter}
       />}
+      <button onClick={setScoreOnDatabase}>TESTING</button>
       <img 
         id='puzzle' 
         src={puzzle.img} 
         alt={puzzle.name}
         onClick={handleClick}
+        onLoad={addGameToDatabase}
       />
     </div>
   )
