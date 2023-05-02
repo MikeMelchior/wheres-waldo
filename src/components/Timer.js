@@ -9,9 +9,9 @@ export default function Timer() {
   let hours = Math.floor(time/3600)
 
   const addZero = (num) => {
-    let addZeroWithArray = ['0'];
-    addZeroWithArray.push(num.toString())
-    let result = addZeroWithArray.join('')
+    let addZeroUsingArray = ['0'];
+    addZeroUsingArray.push(num.toString())
+    let result = addZeroUsingArray.join('')
     return result
   }
   
