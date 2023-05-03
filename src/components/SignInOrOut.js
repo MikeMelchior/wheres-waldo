@@ -7,7 +7,7 @@ import {
   signOut,
 } from 'firebase/auth';
 
-export default function Signup( { player, setPlayer } ) {
+export default function SignInOrOut( { player, setPlayer } ) {
   const [loading, setLoading] = useState(true)
 
   // set player using google auth (firebase)
