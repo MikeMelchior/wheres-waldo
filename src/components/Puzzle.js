@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react'
 import CharacterSelectWindow from './CharacterSelect'
-import uniqid from 'uniqid'
 
 import { getAuth } from 'firebase/auth'
 
@@ -9,12 +8,7 @@ import {
   addDoc, 
   serverTimestamp, 
   getFirestore, 
-  query, 
-  onSnapshot,
   doc,
-  setDoc,
-  orderBy,
-  limit, 
   getDoc,
   updateDoc,
   } from 'firebase/firestore'
@@ -23,20 +17,8 @@ const getUserName = () => {
   return getAuth().currentUser.displayName
 }
 
-const calculateDuration = (startTime, finishTime) => {
-  if (!startTime || !finishTime) return null;
-  return null
-}
 
-
-
-
-
-
-
-export default function Puzzle( { puzzle, setCharacters } ) {
-
-  const [ID, setID] = useState()
+export default function Puzzle( { puzzle, setCharacters, setPuzzleComplete, dbRefID, setdbRefID } ) {
 
     // once puzzle has loaded, set characters to be used in header
   useEffect(() => {
@@ -55,15 +37,16 @@ export default function Puzzle( { puzzle, setCharacters } ) {
     // use to determine if click event should remove character select 'dropdown' menu
   const [characterSelectWindowShowing, setCharacterSelectWindowShowing] = useState(false)
 
+  
     // Saves a new timestamp on the Cloud Firestore.
   async function addGameToDatabase() {
     // Add a new timestamp entry to the Firebase database.
     try {
-      let ref = await addDoc(collection(getFirestore(), 'scores'), {
+      let ref = await addDoc(collection(getFirestore(), `${puzzle.name}`), {
         name: getUserName(),
         startTime: serverTimestamp()
       });
-      setID(ref.id)
+      setdbRefID(ref.id)
     }
     catch(error) {
       console.error('Error writing new score to Firebase Database', error);
@@ -71,7 +54,7 @@ export default function Puzzle( { puzzle, setCharacters } ) {
   }
 
   async function setScoreOnDatabase() {
-    let docRef = doc(getFirestore(), 'scores', ID);
+    let docRef = doc(getFirestore(), `${puzzle.name}`, dbRefID);
 
     const docSnap = await getDoc(docRef);
     let startTimeInteger = docSnap.data().startTime.seconds + (docSnap.data().startTime.nanoseconds / 1_000_000_000)
@@ -145,11 +128,15 @@ export default function Puzzle( { puzzle, setCharacters } ) {
 
         // if puzzle completed, add finish time to database document
       if (noCharactersRemain) {
-        let docRef = doc(getFirestore(), 'scores', ID)
+        let docRef = doc(getFirestore(), `${puzzle.name}`, dbRefID)
         try {
           updateDoc(docRef, {
             finishTime: serverTimestamp()
           })
+          setScoreOnDatabase()
+          setTimeout(() => {
+            setPuzzleComplete(true)
+          }, 500);
         } catch (e) {
           console.log('Failed to update document: ', e)
         }
@@ -166,8 +153,7 @@ export default function Puzzle( { puzzle, setCharacters } ) {
         return previousRemainingCharacters.filter(character => character !== foundCharacter)
       })
 
-      setScoreOnDatabase()
-      
+      return true;
     } else {
       alert(`That's not ${character.name}!`)
     }
@@ -184,24 +170,23 @@ export default function Puzzle( { puzzle, setCharacters } ) {
   
 
   return (
-    
-    <div className="picture-container">
-      {  characterSelectWindowShowing 
-        && clientClickCoordinates !== undefined 
-        && <CharacterSelectWindow 
-        characters={remainingCharacters}
-        remainingCharacters={remainingCharacters}
-        clickCoordinates={clientClickCoordinates} 
-        checkCoordinatesForRemainingCharacter={checkCoordinatesForRemainingCharacter}
-      />}
-      <button onClick={setScoreOnDatabase}>TESTING</button>
-      <img 
-        id='puzzle' 
-        src={puzzle.img} 
-        alt={puzzle.name}
-        onClick={handleClick}
-        onLoad={addGameToDatabase}
-      />
-    </div>
+    <>
+        <div className="picture-container">
+          {characterSelectWindowShowing 
+            && clientClickCoordinates !== undefined 
+            && <CharacterSelectWindow 
+            remainingCharacters={remainingCharacters}
+            clickCoordinates={clientClickCoordinates} 
+            checkCoordinatesForRemainingCharacter={checkCoordinatesForRemainingCharacter}
+          />}
+          <img 
+            id='puzzle' 
+            src={puzzle.img} 
+            alt={puzzle.name}
+            onClick={handleClick}
+            onLoad={addGameToDatabase}
+          />
+        </div>
+    </>
   )
 }
