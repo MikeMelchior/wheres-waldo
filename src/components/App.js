@@ -1,13 +1,14 @@
 import { useEffect, useState } from 'react';
-
 import { pictures } from '../puzzles/puzzlesData';
 import '../assets/styles.css'
 import Puzzle from './Puzzle';
 import Header from './Header';
 import Footer from './Footer';
-import Signup from './Signup';
-
+import SignInOrOut from './SignInOrOut';
+import User from './User';
+import HighScoreWindow from './HighScoreWindow';
 import { initializeApp } from "firebase/app";
+
 
 
 const app = {
@@ -23,7 +24,12 @@ const app = {
 
 function App() {
   const [puzzle, setPuzzle] = useState()
+    // player set using google auth
   const [player, setPlayer] = useState()
+    //if puzzle complete show high score window
+  const [puzzleComplete, setPuzzleComplete] = useState(false)
+    // data base ref to current game
+  const [dbRefID, setdbRefID] = useState()
 
     // use to change character style in header once character is found (grey-out)
   const [characters, setCharacters] = useState([])
@@ -43,29 +49,47 @@ function App() {
 
   return (
     <>
-      { player 
+      {puzzleComplete && player
       ?
-        <div className='app'>
-          <Signup player={player} setPlayer={setPlayer} />
-          <div className="player">
-            <img id='player-image' src={player.photoURL} alt={player.displayName} />
-            <p className='welcome'>Hello {player.displayName}!</p>
-          </div>
-          <div>
-            <div>
-                {puzzle && 
-                <div className="main">
-                  <Header puzzle={puzzle} characters={characters}/>
-                  <Puzzle puzzle={puzzle} setCharacters={setCharacters}/>
-                </div>}
-            </div>           
-          </div>
-          <Footer /> 
-        </div>
+        <HighScoreWindow 
+          player={player} 
+          puzzle={puzzle} 
+          dbRefID={dbRefID}
+        />
       :
-        <Signup player={player} setPlayer={setPlayer} />
+        <>
+          { player 
+          ?
+            <div className='app'>
+              <SignInOrOut player={player} setPlayer={setPlayer} />
+              <User player={player} />
+              <div>
+                <div>
+                    {puzzle && 
+                    <div className="main">
+                      <Header puzzle={puzzle} characters={characters} />
+                      <Puzzle 
+                        puzzle={puzzle} 
+                        setCharacters={setCharacters} 
+                        player={player}
+                        setPuzzleComplete={setPuzzleComplete}
+                        dbRefID={dbRefID}
+                        setdbRefID={setdbRefID}
+                      />
+                    </div>}
+                </div>           
+              </div>
+              <Footer /> 
+            </div>
+          :
+            <SignInOrOut player={player} setPlayer={setPlayer} />
+          }
+          
+        </>
       }
+      
     </>
+    
   );
 }
 initializeApp(app)
