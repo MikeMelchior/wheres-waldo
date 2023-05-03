@@ -44,10 +44,10 @@ html {
     width: 60%;
     margin: 30px auto;
     border-radius: 10px;
-    background-color:#91da55;
-    padding: 10px;
+    background-color:#55bdda;
+    padding: 8px;
     font-weight: 600px;
-    font-size: 20px;
+    font-size: 22px;
   }
 
     .player {
@@ -156,6 +156,84 @@ html {
     opacity: 0.5;
   }
 
+.high-score-window {
+  min-height: 100vh;
+  background-color: #dfff5e;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 2rem;
+}
+
+  .high-score-window h1 {
+    margin: 2rem 0;
+    color: #006794;
+  }
+
+  .high-score-window label {
+    font-size: 26px;
+    display: flex;
+    gap: 20px;
+    padding: 20px;
+    display: flex;
+    align-items: center;
+  }
+
+  .high-score-window input {
+    width: 250px;
+    padding: 2px 6px;
+    font-size: 22px;
+    border-radius: 5px;
+    border: none;
+  }
+
+  .high-score-window input:focus {
+    outline: auto #006794;
+  }
+
+  .high-score-window button {
+    margin: 2rem;
+    height: 45px;
+    width: 150px;
+    border-radius: 15px;
+    font-size: 20px;
+    font-weight: bold;
+    background-color: #12d300;
+  }
+
+  .scores-display {
+    border: 10px ridge #006794;
+    border-radius: 15px;
+    background-color: #dae1ff;
+    padding: 1rem;
+  }
+
+  .scores-display > p {
+    color: #006794;
+    margin: 1rem 0 2rem 0;
+    font-size: 32px;
+    font-weight: bold;
+    text-decoration: underline;
+    text-align: center;
+    width: 350px;
+  }
+
+  .single-high-score {
+    display: flex;
+    width: 350px;
+    justify-content: space-between;
+    align-items: center;
+    background-color: #abbaff;
+    border-radius: 10px;
+    padding: 8px;
+    margin-bottom: 5px;
+  }
+
+  .single-high-score p {
+    margin: 0;
+    font-size: 20px;
+  }
 
 .hidden {
   width: 0;
