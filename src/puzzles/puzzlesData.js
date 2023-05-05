@@ -72,10 +72,10 @@ const pictures = {
         name: 'Waldo',
         img: waldoAvatar,
         location: {
-          xMin: null,
-          xMax: null,
-          yMin: null,
-          yMax: null
+          xMin: 1336,
+          xMax: 1400,
+          yMin: 637,
+          yMax: 696
         }
       },
     ]
