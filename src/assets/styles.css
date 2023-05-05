@@ -11,7 +11,9 @@ html {
 #root {
   background-color: #e8fcf9;
   min-height: 100vh;
+  min-width: fit-content;
 }
+
 
 .sign-in-page {
   height: 100vh;
@@ -50,35 +52,84 @@ html {
     font-size: 22px;
   }
 
-    .player {
-      display: flex;
-      gap: 10px;
-      align-items: center;
-      justify-content: end;
-      padding-right: 20px;
-    }
+.player {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  align-items: end;
+  padding: 10px 10px 0 0;
+}
 
-      .player p {
-        font-size: 20px;
-      }
+  .user {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+  }
+  .player p {
+    font-size: 20px;
+  }
 
-      #player-image {
-        border-radius: 50px;
-        height: 70px;
-      }
+  #player-image {
+    border-radius: 50px;
+    height: 70px;
+  }
 
-      .sign-out {
-        align-self: start;
-        border-radius: 5px;
-        margin: 5px 5px 0 auto;
-      }
+  .sign-out {
+    border-radius: 10px;
+    padding: 4px 10px;
+  }
+
+.puzzle-selection-page {
+  min-height: 100%;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  gap: 15px;
+  place-items: center;
+  padding: 10px;
+}
+
+  .puzzle-select-header {
+    text-align: center;
+    color: #006794;
+    font-size: 40px;
+    padding-bottom: 40px;
+  }
+
+  .puzzle-selection-card {
+    width: fit-content;
+  }
+
+  .puzzle-selection-card h3 {
+    margin: 0;
+    padding: 10px 0;
+    text-align: center;
+  }
+
+  .puzzle-selection-card p {
+    text-align: center;
+    font-size: 18px;
+  }
+
+  .puzzle-selection-card:hover {
+    transform: scale(1.03);
+    cursor: pointer;
+  }
 
 
+  .puzzle-selection-card img {
+    aspect-ratio: 16/9;
+    height: 180px;
+  }
 
 .app {
   display: flex;
   flex-direction: column;
+  min-height: 100vh;
 }
+
+  .app-div {
+    min-width: fit-content;
+  }
 
 .header {
   height: fit-content;
@@ -87,6 +138,12 @@ html {
   flex-direction: column;
   align-items: center;
 }
+
+  .header > div:first-of-type{
+    display: flex;
+    gap: 30px;
+    flex-wrap: wrap;
+  }
 
   .character-header {
     text-align: center;
@@ -148,6 +205,7 @@ html {
   display: flex;
   justify-content: end;
   padding: 5px 15px;
+  margin: 0;
 }
 
   .footer a {
@@ -207,6 +265,9 @@ html {
     border-radius: 15px;
     background-color: #dae1ff;
     padding: 1rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
   }
 
   .scores-display > p {

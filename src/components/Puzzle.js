@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import CharacterSelectWindow from './CharacterSelect'
 
 import { getAuth } from 'firebase/auth'
@@ -37,6 +37,9 @@ export default function Puzzle( { puzzle, setCharacters, setPuzzleComplete, dbRe
     // use to determine if click event should remove character select 'dropdown' menu
   const [characterSelectWindowShowing, setCharacterSelectWindowShowing] = useState(false)
 
+    //use ref to get up to get up to date state to check puzzle completion
+  const remainingCharactersRef = useRef()
+  remainingCharactersRef.current = remainingCharacters.length;
   
     // Saves a new timestamp on the Cloud Firestore.
   async function addGameToDatabase() {
@@ -104,6 +107,7 @@ export default function Puzzle( { puzzle, setCharacters, setPuzzleComplete, dbRe
     let rect = e.target.getBoundingClientRect()
     let x = e.clientX - rect.left
     let y = e.clientY - rect.top
+    console.log('X: ', x, ' ', 'Y: ', y)
 
     setPuzzleClickX(x);
     setPuzzleClickY(y);
@@ -125,35 +129,40 @@ export default function Puzzle( { puzzle, setCharacters, setPuzzleComplete, dbRe
 
     // if character has been found, update remainingCharacters state
     if (foundCharacter && foundCharacter === character) {
+        // use ref to keep track of up to date number of remaining characters
+      remainingCharactersRef.current = remainingCharactersRef.current - 1;
+
+        // update characters to style header
+      setCharacters((current) => {
+        let updatedCharacters = current.filter(char => char.name !== foundCharacter.name)
+        // foundCharacter.found = true;
+        return [...updatedCharacters, {...foundCharacter, found: true}]
+      })
+
+      alert(`you found ${foundCharacter.name}!`);
+
+      setRemainingCharacters((previousRemainingCharacters) => {
+        return previousRemainingCharacters.filter(character => character !== foundCharacter)
+      })
 
         // if puzzle completed, add finish time to database document
-      if (noCharactersRemain) {
+      if (noCharactersRemain()) {
         let docRef = doc(getFirestore(), `${puzzle.name}`, dbRefID)
         try {
           updateDoc(docRef, {
             finishTime: serverTimestamp()
           })
-          setScoreOnDatabase()
+          setTimeout(() => {
+            setScoreOnDatabase()
+          }, 100);
           setTimeout(() => {
             setPuzzleComplete(true)
-          }, 500);
+          }, 200);
         } catch (e) {
           console.log('Failed to update document: ', e)
         }
       }
 
-        // update characters to style header
-      setCharacters((current) => {
-        let updatedCharacters = current.filter(char => char.name !== foundCharacter.name)
-        foundCharacter.found = true;
-        return [...updatedCharacters, foundCharacter]
-      })
-      alert(`you found ${foundCharacter.name}!`);
-      setRemainingCharacters((previousRemainingCharacters) => {
-        return previousRemainingCharacters.filter(character => character !== foundCharacter)
-      })
-
-      return true;
     } else {
       alert(`That's not ${character.name}!`)
     }
@@ -163,11 +172,9 @@ export default function Puzzle( { puzzle, setCharacters, setPuzzleComplete, dbRe
   }
 
   const noCharactersRemain = () => {
-    return remainingCharacters.length === 0;
+    return remainingCharactersRef.current === 0;
   }
 
-  
-  
 
   return (
     <>

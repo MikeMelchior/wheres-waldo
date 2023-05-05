@@ -12,7 +12,7 @@ import React, { useEffect, useState } from 'react'
 
 
 
-export default function HighScoreWindow( { player, puzzle, dbRefID } ) {
+export default function HighScoreWindow( { player, puzzle, dbRefID, setPuzzle, setStart, setPuzzleComplete } ) {
   const [name, setName] = useState()
   const [submitted, setSubmitted] = useState(false)
   let docRef = doc(getFirestore(), `${puzzle.name}`, dbRefID)
@@ -45,8 +45,13 @@ export default function HighScoreWindow( { player, puzzle, dbRefID } ) {
     let scoreElement = document.createElement('p');
       scoreElement.textContent = score
 
-    element.append(nameElement, scoreElement)
-    document.querySelector('.scores-display').append(element)
+    try {
+      element.append(nameElement, scoreElement)
+      document.querySelector('.scores-display').append(element)
+    } catch(e) {
+      console.log(e)
+    }
+    
   }
 
 
@@ -66,13 +71,18 @@ export default function HighScoreWindow( { player, puzzle, dbRefID } ) {
       getScores()
       setName('')
       setSubmitted(true)
-    }, 200)
-    
+    }, 100)
+  }
+
+  const startNewGame = () => {
+    setPuzzle(null)
+    setStart(false)
+    setPuzzleComplete(false)
   }
 
   return (
     <div className='high-score-window'>
-      <h1>{`${puzzle.name.toUpperCase()}`}</h1>
+      <h1>You Completed {`${puzzle.name.toUpperCase()}`} !</h1>
       {!submitted
       ?<>
         <label htmlFor='name'> Enter your name:
@@ -91,9 +101,14 @@ export default function HighScoreWindow( { player, puzzle, dbRefID } ) {
       </>
       
       : 
+
         <div className="scores-display">
           <p>High Scores</p>
+          <button onClick={startNewGame}>PLAY AGAIN</button>
         </div>
+
+        
+        
       }
       
       

@@ -24,6 +24,7 @@ export default function Timer() {
   if (hours.toString().length === 1) {
     hours = addZero(hours)
   }
+  
 
   useEffect(() => {
     let timer = setInterval(() => {
@@ -36,6 +37,7 @@ export default function Timer() {
       clearInterval(timer)
     }
   }, [time])
+  
   
 
   return (
