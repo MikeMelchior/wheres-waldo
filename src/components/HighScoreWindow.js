@@ -15,20 +15,18 @@ import React, { useEffect, useState } from 'react'
 export default function HighScoreWindow( { player, puzzle, dbRefID, setPuzzle, setStart, setPuzzleComplete } ) {
   const [name, setName] = useState()
   const [submitted, setSubmitted] = useState(false)
+
   let docRef = doc(getFirestore(), `${puzzle.name}`, dbRefID)
 
   useEffect(() => {
-    setName(player.displayName)
+    setName(player.displayName ? player.displayName : 'guest')
   },[player.displayName])
 
-
-
   function getScores() {
-    // Create the query to load the last 12 messages and listen for new ones.
-    const recentMessagesQuery = query(collection(getFirestore(), `${puzzle.name}`), orderBy('score', 'asc'), limit(8));
+    const recentScoresQuery = query(collection(getFirestore(), `${puzzle.name}`), orderBy('score', 'asc'), limit(8));
     
     // Start listening to the query.
-    onSnapshot(recentMessagesQuery, function(snapshot) {
+    onSnapshot(recentScoresQuery, function(snapshot) {
       snapshot.docChanges().forEach(function(change) {
         let gameData = change.doc.data();
         if (gameData.nickname && gameData.score) createScoreDiv(gameData.nickname, gameData.score)
@@ -71,7 +69,7 @@ export default function HighScoreWindow( { player, puzzle, dbRefID, setPuzzle, s
       getScores()
       setName('')
       setSubmitted(true)
-    }, 100)
+    }, 400)
   }
 
   const startNewGame = () => {

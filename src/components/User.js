@@ -7,8 +7,8 @@ export default function User( { player, setPlayer } ) {
     <div className='player'>
       <SignInOrOut player={player} setPlayer={setPlayer} />
       <div className="user">
-        <img id='player-image' src={player.photoURL} alt='player-avatar' />
-        <p className='welcome'>Hello {player.displayName}!</p>
+        {player.photoURL && <img id='player-image' src={player.photoURL} alt='player-avatar' />}
+        <p className='welcome'>Hello {player.displayName ? player.displayName : 'Guest'}!</p>
       </div>
       
     </div>
