@@ -7,6 +7,7 @@ export default function PuzzleSelectionPage( { setStart, setPuzzle } ) {
   useEffect(() => {
     styleParent()
   }, [])
+  
   const styleParent = () => {
     setTimeout(() => {
       document.querySelector('.app-div').style.flex = 1

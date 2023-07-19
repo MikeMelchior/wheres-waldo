@@ -13,9 +13,9 @@ import {
   updateDoc,
   } from 'firebase/firestore'
 
-const getUserName = () => {
-  return getAuth().currentUser.displayName
-}
+// const getUserName = () => {
+//   return getAuth().currentUser.displayName
+// }
 
 
 export default function Puzzle( { puzzle, setCharacters, setPuzzleComplete, dbRefID, setdbRefID } ) {
@@ -46,7 +46,7 @@ export default function Puzzle( { puzzle, setCharacters, setPuzzleComplete, dbRe
     // Add a new timestamp entry to the Firebase database.
     try {
       let ref = await addDoc(collection(getFirestore(), `${puzzle.name}`), {
-        name: getUserName(),
+        // name: getUserName(),
         startTime: serverTimestamp()
       });
       setdbRefID(ref.id)
@@ -107,7 +107,7 @@ export default function Puzzle( { puzzle, setCharacters, setPuzzleComplete, dbRe
     let rect = e.target.getBoundingClientRect()
     let x = e.clientX - rect.left
     let y = e.clientY - rect.top
-    console.log('X: ', x, ' ', 'Y: ', y)
+    // console.log('X: ', x, ' ', 'Y: ', y)
 
     setPuzzleClickX(x);
     setPuzzleClickY(y);
@@ -135,7 +135,6 @@ export default function Puzzle( { puzzle, setCharacters, setPuzzleComplete, dbRe
         // update characters to style header
       setCharacters((current) => {
         let updatedCharacters = current.filter(char => char.name !== foundCharacter.name)
-        // foundCharacter.found = true;
         return [...updatedCharacters, {...foundCharacter, found: true}]
       })
 
