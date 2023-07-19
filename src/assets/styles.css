@@ -280,6 +280,10 @@ html {
     width: 350px;
   }
 
+  .scores-display button {
+    min-height: fit-content;
+  }
+
   .single-high-score {
     display: flex;
     width: 350px;
